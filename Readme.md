@@ -1,7 +1,7 @@
 # Личный проект «Кексобукинг» [![Build status][travis-image]][travis-url]
 
 * Студент: [Kathrin Borisova](https://up.htmlacademy.ru/javascript/21/user/1216329).
-* Наставник: `Неизвестно`.
+* Наставник: `Владимир Шишлянников`.
 
 ---
 
