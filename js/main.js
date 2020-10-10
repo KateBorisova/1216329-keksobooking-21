@@ -1,9 +1,9 @@
 'use strict';
-const offerTypes = [`palace`, `flat`, `house`, `bungalow`];
-const offerCheckInOptions = [`12:00`, `13:00`, `14:00`];
-const offerCheckOutOptions = [`12:00`, `13:00`, `14:00`];
-const offerFeatureOptions = [`wifi`, `dishwasher`, `parking`, `washer`, `elevator`, `conditioner`];
-const offerPhotos = [`http://o0.github.io/assets/images/tokyo/hotel1.jpg`, `http://o0.github.io/assets/images/tokyo/hotel2.jpg`, `http://o0.github.io/assets/images/tokyo/hotel3.jpg`];
+const OFFER_TYPES = [`palace`, `flat`, `house`, `bungalow`];
+const OFFER_CHECK_IN_OPTIONS = [`12:00`, `13:00`, `14:00`];
+const OFFER_CHECK_OUT_OPTIONS = [`12:00`, `13:00`, `14:00`];
+const OFFER_FEATURE_OPTIONS = [`wifi`, `dishwasher`, `parking`, `washer`, `elevator`, `conditioner`];
+const OFFER_PHOTOS = [`http://o0.github.io/assets/images/tokyo/hotel1.jpg`, `http://o0.github.io/assets/images/tokyo/hotel2.jpg`, `http://o0.github.io/assets/images/tokyo/hotel3.jpg`];
 
 let getRandomNumber = function (min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -37,14 +37,14 @@ let getSimilarAdsMocks = function () {
         title: `Title` + (i + 1),
         address: locationX + `, ` + locationY,
         price: getRandomNumber(50, 150),
-        type: offerTypes[getRandomNumber(0, offerTypes.length - 1)],
+        type: OFFER_TYPES[getRandomNumber(0, OFFER_TYPES.length - 1)],
         rooms: getRandomNumber(1, 5),
         guests: getRandomNumber(1, 10),
-        checkin: getRandomArrayElement(offerCheckInOptions),
-        checkout: getRandomArrayElement(offerCheckOutOptions),
-        features: getRandomSubArray(offerFeatureOptions),
+        checkin: getRandomArrayElement(OFFER_CHECK_IN_OPTIONS),
+        checkout: getRandomArrayElement(OFFER_CHECK_OUT_OPTIONS),
+        features: getRandomSubArray(OFFER_FEATURE_OPTIONS),
         description: `Description` + (i + 1),
-        photos: getRandomSubArray(offerPhotos),
+        photos: getRandomSubArray(OFFER_PHOTOS),
       },
       location: {
         x: locationX,
@@ -62,10 +62,10 @@ let pinTemplate = document.querySelector(`#pin`);
 
 let createPinElement = function (ad) {
   let pinElement = pinTemplate.cloneNode(true).content.querySelector(`.map__pin`);
-  let pinHeight = pinElement.clientHeight;
-  let pinWidth = pinElement.clientWidth;
-  pinElement.style.left = ad.location.x - pinWidth / 2 + `px`;
-  pinElement.style.top = ad.location.y - pinHeight + `px`;
+  const PIN_HEIGHT = pinElement.clientHeight;
+  const PIN_WIDTH = pinElement.clientWidth;
+  pinElement.style.left = ad.location.x - PIN_WIDTH / 2 + `px`;
+  pinElement.style.top = ad.location.y - PIN_HEIGHT + `px`;
   pinElement.querySelector(`img`).src = ad.author.avatar;
   pinElement.querySelector(`img`).alt = ad.offer.title;
 
@@ -73,7 +73,7 @@ let createPinElement = function (ad) {
 };
 
 let pinsFragment = document.createDocumentFragment();
-for (const ad of getSimilarAdsMocks()) {
+for (let ad of getSimilarAdsMocks()) {
   pinsFragment.appendChild(createPinElement(ad));
 }
 
