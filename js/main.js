@@ -4,6 +4,8 @@ const OFFER_CHECK_IN_OPTIONS = [`12:00`, `13:00`, `14:00`];
 const OFFER_CHECK_OUT_OPTIONS = [`12:00`, `13:00`, `14:00`];
 const OFFER_FEATURE_OPTIONS = [`wifi`, `dishwasher`, `parking`, `washer`, `elevator`, `conditioner`];
 const OFFER_PHOTOS = [`http://o0.github.io/assets/images/tokyo/hotel1.jpg`, `http://o0.github.io/assets/images/tokyo/hotel2.jpg`, `http://o0.github.io/assets/images/tokyo/hotel3.jpg`];
+const PIN_HEIGHT = 70;
+const PIN_WIDTH = 50;
 
 let getRandomNumber = function (min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -62,8 +64,6 @@ let pinTemplate = document.querySelector(`#pin`);
 
 let createPinElement = function (ad) {
   let pinElement = pinTemplate.cloneNode(true).content.querySelector(`.map__pin`);
-  const PIN_HEIGHT = pinElement.clientHeight;
-  const PIN_WIDTH = pinElement.clientWidth;
   pinElement.style.left = ad.location.x - PIN_WIDTH / 2 + `px`;
   pinElement.style.top = ad.location.y - PIN_HEIGHT + `px`;
   pinElement.querySelector(`img`).src = ad.author.avatar;
