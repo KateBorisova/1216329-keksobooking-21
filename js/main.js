@@ -83,9 +83,9 @@ mapPins.appendChild(pinsFragment);
 let adForm = document.querySelector(`.ad-form`);
 let adFormFieldsets = adForm.querySelectorAll(`fieldset`);
 
-for (const adFormFieldset of adFormFieldsets) {
-  adFormFieldset.setAttribute(`disabled`, `disabled`);
-}
+adFormFieldsets.forEach((element) => {
+  element.setAttribute(`disabled`, `disabled`);
+});
 
 let mapFiltersForm = document.querySelector(`.map__filters`);
 let mapFiltersInteractiveElements = mapFiltersForm.querySelectorAll(`:scope > select, :scope > fieldset`);
@@ -95,8 +95,11 @@ for (const mapFiltersInteractiveElement of mapFiltersInteractiveElements) {
 }
 
 let enablePage = function () {
-  let mapElement = document.querySelector(`.map`);
-  mapElement.classList.remove(`map--faded`);
+  let mainMap = document.querySelector(`.map`);
+  mainMap.classList.remove(`map--faded`);
+
+  let addForm = document.querySelector(`.ad-form`);
+  addForm.classList.remove(`ad-form--disabled`);
 
   for (const adFormFieldset of adFormFieldsets) {
     adFormFieldset.removeAttribute(`disabled`);
@@ -134,12 +137,12 @@ let guestsNumberSelect = document.querySelector(`#capacity`);
 const validateRoomsAndGuests = function () {
   let roomsNumberValue = roomsNumberSelect.value;
   let guestsNumberValue = guestsNumberSelect.value;
-  let roomsMatchGuests = (roomsNumberValue === `1` && guestsNumberValue === `1`) ||
-    (roomsNumberValue === `2` && (guestsNumberValue === `1` || guestsNumberValue === `2`)) ||
-    (roomsNumberValue === `3` && (guestsNumberValue === `1` || guestsNumberValue === `2` || guestsNumberValue === `3`)) ||
-    (roomsNumberValue === `100` && guestsNumberValue === `0`);
+  let roomsMatchGuests = roomsNumberValue === `1` && guestsNumberValue === `1` ||
+    roomsNumberValue === `2` && (guestsNumberValue === `1` || guestsNumberValue === `2`) ||
+    roomsNumberValue === `3` && (guestsNumberValue === `1` || guestsNumberValue === `2` || guestsNumberValue === `3`) ||
+    roomsNumberValue === `100` && guestsNumberValue === `0`;
 
-  guestsNumberSelect.setCustomValidity((roomsMatchGuests) ? `` : `Количество гостей не соответствует количеству комнат`);
+  guestsNumberSelect.setCustomValidity(roomsMatchGuests ? `` : `Количество гостей не соответствует количеству комнат`);
 };
 roomsNumberSelect.addEventListener(`change`, validateRoomsAndGuests);
 guestsNumberSelect.addEventListener(`change`, validateRoomsAndGuests);
