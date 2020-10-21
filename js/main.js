@@ -74,7 +74,7 @@ let createNewPin = function (ad) {
 
 let pinsFragment = document.createDocumentFragment();
 getSimilarAdsMocks.forEach((element) => {
-  element.appendChild(createNewPin(ad));
+  element.appendChild(createNewPin(element));
 });
 
 let mapPins = document.querySelector(`.map__pins`);
@@ -90,9 +90,9 @@ adFormFieldsets.forEach((element) => {
 let mapFiltersForm = document.querySelector(`.map__filters`);
 let mapFiltersFieldsetsAndSelects = mapFiltersForm.querySelectorAll(`:scope > select, :scope > fieldset`);
 
-mapFiltersFieldsetsAndSelects.forEach((element) {
+mapFiltersFieldsetsAndSelects.forEach((element) => {
   element.setAttribute(`disabled`, `disabled`);
-})
+});
 
 let enablePage = function () {
   let mainMap = document.querySelector(`.map`);
