@@ -62,7 +62,7 @@ let getSimilarAdsMocks = function () {
 
 let pinTemplate = document.querySelector(`#pin`);
 
-let createPinElement = function (ad) {
+let createNewPin = function (ad) {
   let pinElement = pinTemplate.cloneNode(true).content.querySelector(`.map__pin`);
   pinElement.style.left = ad.location.x - PIN_WIDTH / 2 + `px`;
   pinElement.style.top = ad.location.y - PIN_HEIGHT + `px`;
@@ -73,9 +73,9 @@ let createPinElement = function (ad) {
 };
 
 let pinsFragment = document.createDocumentFragment();
-for (let ad of getSimilarAdsMocks()) {
-  pinsFragment.appendChild(createPinElement(ad));
-}
+getSimilarAdsMocks.forEach((element) => {
+  element.appendChild(createNewPin(ad));
+});
 
 let mapPins = document.querySelector(`.map__pins`);
 mapPins.appendChild(pinsFragment);
@@ -88,11 +88,11 @@ adFormFieldsets.forEach((element) => {
 });
 
 let mapFiltersForm = document.querySelector(`.map__filters`);
-let mapFiltersInteractiveElements = mapFiltersForm.querySelectorAll(`:scope > select, :scope > fieldset`);
+let mapFiltersFieldsetsAndSelects = mapFiltersForm.querySelectorAll(`:scope > select, :scope > fieldset`);
 
-for (const mapFiltersInteractiveElement of mapFiltersInteractiveElements) {
-  mapFiltersInteractiveElement.setAttribute(`disabled`, `disabled`);
-}
+mapFiltersFieldsetsAndSelects.forEach((element) {
+  element.setAttribute(`disabled`, `disabled`);
+})
 
 let enablePage = function () {
   let mainMap = document.querySelector(`.map`);
@@ -101,13 +101,14 @@ let enablePage = function () {
   let addForm = document.querySelector(`.ad-form`);
   addForm.classList.remove(`ad-form--disabled`);
 
-  for (const adFormFieldset of adFormFieldsets) {
-    adFormFieldset.removeAttribute(`disabled`);
-  }
+  adFormFieldsets.forEach((element) => {
+    element.removeAttribute(`disabled`);
+  });
 
-  for (const mapFiltersInteractiveElement of mapFiltersInteractiveElements) {
-    mapFiltersInteractiveElement.removeAttribute(`disabled`);
-  }
+  mapFiltersFieldsetsAndSelects.forEach((element) => {
+    element.removeAttribute(`disabled`);
+  });
+
   let mainPinPointerX = mapPinMain.offsetLeft + (MAIN_PIN_WIDTH - 1) / 2;
   let mainPinPointerY = mapPinMain.offsetTop + MAIN_PIN_HEIGHT + MAIN_PIN_POINTER_HEIGHT - 1;
   addressInput.value = mainPinPointerX + `, ` + mainPinPointerY;
@@ -147,4 +148,3 @@ const validateRoomsAndGuests = function () {
 roomsNumberSelect.addEventListener(`change`, validateRoomsAndGuests);
 guestsNumberSelect.addEventListener(`change`, validateRoomsAndGuests);
 validateRoomsAndGuests();
-
