@@ -29,8 +29,8 @@ let getRandomArrayElement = function (inputArray) {
 };
 
 let getSimilarAdsMocks = function () {
-  let similarAdsArray = [];
   let mapWidthPx = document.querySelector(`.map__overlay`).clientWidth;
+  let similarAdsArray = [];
   for (let i = 0; i < 8; i++) {
     let locationX = getRandomNumber(0, mapWidthPx);
     let locationY = getRandomNumber(130, 630);
@@ -73,8 +73,8 @@ let createNewPin = function (ad) {
 };
 
 let pinsFragment = document.createDocumentFragment();
-getSimilarAdsMocks.forEach((element) => {
-  element.appendChild(createNewPin(element));
+getSimilarAdsMocks().forEach((ad) => {
+  pinsFragment.appendChild(createNewPin(ad));
 });
 
 let mapPins = document.querySelector(`.map__pins`);
