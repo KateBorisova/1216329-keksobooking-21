@@ -1,7 +1,5 @@
 "use strict";
 (function () {
-  window.map.addPinsToMap(window.data.getSimilarAdsMocks());
-
   window.form.disablePage();
 
   window.form.initFormValidation();
@@ -11,10 +9,24 @@
       startMainPinCoordinates.x,
       startMainPinCoordinates.y
   );
+  let onPinsFetchSuccess = function (pins) {
+    window.map.addPinsToMap(pins);
+  };
+  let onPinsFetchError = function () {
+    let errorMessage = document.createElement(`div`);
+    errorMessage.innerHTML = `Произошла ошибка загрузки`;
+    errorMessage.classList.add(`network-error`);
+    document.body.appendChild(errorMessage);
+
+    setTimeout(() => {
+      document.body.removeChild(errorMessage);
+    }, 3000);
+  };
 
   let enablePage = function () {
     let mainPinCoordinates = window.pin.getMainPinCoordinates();
     window.form.enablePage(mainPinCoordinates.x, mainPinCoordinates.y);
+    window.ajax.getPins(onPinsFetchSuccess, onPinsFetchError);
   };
 
   let onMouseDown = function (evt) {

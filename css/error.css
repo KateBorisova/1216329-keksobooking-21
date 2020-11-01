@@ -1,0 +1,9 @@
+.network-error {
+  padding: 16px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  background-color: rgba(255, 0, 0, 0.2);
+  color: #af1d1d;
+  border-bottom-left-radius: 8px;
+}
