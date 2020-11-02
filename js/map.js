@@ -20,8 +20,12 @@
       return pinElement;
     },
     addPinsToMap(pins) {
+      let pinsToRemove = mapPins.querySelectorAll(`.map__pin:not(.map__pin--main)`);
+      pinsToRemove.forEach((pinToRemove) => {
+        mapPins.removeChild(pinToRemove);
+      });
       let pinsFragment = document.createDocumentFragment();
-      pins.forEach((ad) => {
+      pins.slice(0, 5).forEach((ad) => {
         pinsFragment.appendChild(window.map.createNewPin(ad));
       });
 
@@ -29,3 +33,4 @@
     },
   };
 })();
+

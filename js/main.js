@@ -9,8 +9,10 @@
       startMainPinCoordinates.x,
       startMainPinCoordinates.y
   );
+  let fetchedPins = [];
   let onPinsFetchSuccess = function (pins) {
     window.map.addPinsToMap(pins);
+    fetchedPins = pins;
   };
   let onPinsFetchError = function () {
     let errorMessage = document.createElement(`div`);
@@ -40,4 +42,17 @@
     }
   };
   window.pin.initMainPin(onMouseDown, onKeyDown);
+
+  let houseTypeSelect = document.querySelector(`#housing-type`);
+  houseTypeSelect.addEventListener(`change`, function (evt) {
+    let houseType = evt.currentTarget.value;
+    let filteredPins = [];
+    fetchedPins.forEach((pin) => {
+      if (pin.offer.type === houseType || houseType === `any`) {
+        filteredPins.push(pin);
+      }
+    });
+    window.map.addPinsToMap(filteredPins);
+  });
+
 })();
