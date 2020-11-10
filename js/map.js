@@ -31,6 +31,15 @@
 
       mapPins.appendChild(pinsFragment);
     },
+
+    addPinsToMapByType(pins, houseType) {
+      let filteredPins = [];
+      pins.forEach((pin) => {
+        if (pin.offer.type === houseType || houseType === `any`) {
+          filteredPins.push(pin);
+        }
+      });
+      window.map.addPinsToMap(filteredPins);
+    },
   };
 })();
-

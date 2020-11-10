@@ -110,13 +110,7 @@
   let houseTypeSelect = document.querySelector(`#housing-type`);
   houseTypeSelect.addEventListener(`change`, function (evt) {
     let houseType = evt.currentTarget.value;
-    let filteredPins = [];
-    fetchedPins.forEach((pin) => {
-      if (pin.offer.type === houseType || houseType === `any`) {
-        filteredPins.push(pin);
-      }
-    });
-    window.map.addPinsToMap(filteredPins);
+    window.map.addPinsToMapByType(fetchedPins, houseType);
   });
 
 })();

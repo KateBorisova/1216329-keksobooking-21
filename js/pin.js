@@ -6,6 +6,7 @@
   const MAIN_PIN_WIDTH = 65;
 
   let mapPinMain = document.querySelector(`.map__pin--main`);
+  let mainMap = document.querySelector(`.map`);
 
   window.pin = {
     getMainPinCoordinates() {
