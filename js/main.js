@@ -33,6 +33,16 @@
 
   let mainMap = document.querySelector(`.map`);
   let mapPinMain = document.querySelector(`.map__pin--main`);
+
+
+  // window.pin.initPinDragAndDrop();
+  // window.pin.onPinDrop(() => {
+  //   enablePage();
+  // });
+  // window.pin.onPinMove((x, y) => {
+  //   window.form.setAddressInputValue(x, y);
+  // });
+
   const MAIN_PIN_HEIGHT = 65;
   const MAIN_PIN_POINTER_HEIGHT = 22;
   const MAIN_PIN_WIDTH = 65;
