@@ -36,7 +36,7 @@
       (x, y) => {
         window.form.setAddressInputValue(x, y);
       },
-      // onPinDrop
+      // onPinMouseDown
       () => {
         enablePage();
       },
@@ -50,6 +50,18 @@
   houseTypeSelect.addEventListener(`change`, function (evt) {
     let houseType = evt.currentTarget.value;
     window.map.addPinsToMapByType(fetchedPins, houseType);
+  });
+
+  let onFormSubmitSuccess = function () {
+    console.log(`success`);
+  };
+
+  let onFormSubmitError = function () {
+    console.log(`error`);
+  };
+
+  window.form.onFormSubmit(function (formData) {
+    window.ajax.submitForm(formData, onFormSubmitSuccess, onFormSubmitError);
   });
 
 })();

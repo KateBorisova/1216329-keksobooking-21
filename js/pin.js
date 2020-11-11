@@ -41,7 +41,7 @@
       };
     },
 
-    initPinDragAndDrop(onPinMove, onPinDrop, onEnter) {
+    initPinDragAndDrop(onPinMove, onPinMouseDown, onEnter) {
       let onMouseMove = function (evt) {
         evt.preventDefault();
 
@@ -52,8 +52,8 @@
         let Border = {
           TOP: DRAG_LIMIT.Y.MIN - mapPinMain.offsetHeight - MAIN_PIN_POINTER_HEIGHT,
           BOTTOM: DRAG_LIMIT.Y.MAX - mapPinMain.offsetHeight - MAIN_PIN_POINTER_HEIGHT,
-          LEFT: DRAG_LIMIT.X.MIN,
-          RIGHT: DRAG_LIMIT.X.MAX - mapPinMain.offsetWidth
+          LEFT: DRAG_LIMIT.X.MIN - MAIN_PIN_WIDTH / 2,
+          RIGHT: DRAG_LIMIT.X.MAX - MAIN_PIN_WIDTH / 2
         };
 
         if (mainPinPosition.x >= Border.LEFT && mainPinPosition.x <= Border.RIGHT) {
@@ -71,9 +71,8 @@
 
       let onMouseUp = function (evt) {
         evt.preventDefault();
-        mainMap.removeEventListener(`mousemove`, onMouseMove);
-        mainMap.removeEventListener(`mouseup`, onMouseUp);
-        onPinDrop();
+        document.removeEventListener(`mousemove`, onMouseMove);
+        document.removeEventListener(`mouseup`, onMouseUp);
       };
 
       let onMouseDown = function (evt) {
@@ -83,8 +82,9 @@
             x: evt.offsetX,
             y: evt.offsetY
           };
-          mainMap.addEventListener(`mousemove`, onMouseMove);
-          mainMap.addEventListener(`mouseup`, onMouseUp);
+          document.addEventListener(`mousemove`, onMouseMove);
+          document.addEventListener(`mouseup`, onMouseUp);
+          onPinMouseDown();
         }
       };
 
