@@ -53,11 +53,9 @@
   });
 
   let onFormSubmitSuccess = function () {
-    console.log(`success`);
   };
 
   let onFormSubmitError = function () {
-    console.log(`error`);
   };
 
   window.form.onFormSubmit(function (formData) {
