@@ -14,6 +14,7 @@
     window.map.addPinsToMap(pins);
     fetchedPins = pins;
   };
+
   let onPinsFetchError = function () {
     let errorMessage = document.createElement(`div`);
     errorMessage.innerHTML = `Произошла ошибка загрузки`;
@@ -61,5 +62,6 @@
   window.form.onFormSubmit(function (formData) {
     window.ajax.submitForm(formData, onFormSubmitSuccess, onFormSubmitError);
   });
+
 
 })();
