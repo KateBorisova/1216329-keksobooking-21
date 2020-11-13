@@ -4,6 +4,11 @@
   const MAIN_PIN_HEIGHT = 65;
   const MAIN_PIN_POINTER_HEIGHT = 22;
   const MAIN_PIN_WIDTH = 65;
+  let mapPinMain = document.querySelector(`.map__pin--main`);
+  const MAIN_PIN_INITIAL_COORDINATES = {
+    X: mapPinMain.offsetLeft,
+    Y: mapPinMain.offsetTop
+  };
 
   let mainMap = document.querySelector(`.map`);
   const DRAG_LIMIT = {
@@ -16,29 +21,33 @@
       MAX: 630
     }
   };
-
-  let mapPinMain = document.querySelector(`.map__pin--main`);
   let pinClickCoordinates = {};
 
   window.pin = {
     getMainPinCoordinates() {
       let mainPinPointerX = mapPinMain.offsetLeft + (MAIN_PIN_WIDTH - 1) / 2;
       let mainPinPointerY =
-        mapPinMain.offsetTop + MAIN_PIN_HEIGHT + MAIN_PIN_POINTER_HEIGHT - 1;
+      mapPinMain.offsetTop + MAIN_PIN_HEIGHT + MAIN_PIN_POINTER_HEIGHT - 1;
 
       return {
         x: mainPinPointerX,
         y: mainPinPointerY,
       };
     },
+
     getStartMainPinCoordinates() {
-      let mainPinCenterX = mapPinMain.offsetLeft + (MAIN_PIN_WIDTH - 1) / 2;
-      let mainPinCenterY = mapPinMain.offsetTop + (MAIN_PIN_HEIGHT - 1) / 2;
+      let mainPinCenterX = MAIN_PIN_INITIAL_COORDINATES.X + (MAIN_PIN_WIDTH - 1) / 2;
+      let mainPinCenterY = MAIN_PIN_INITIAL_COORDINATES.Y + (MAIN_PIN_HEIGHT - 1) / 2;
 
       return {
         x: mainPinCenterX,
         y: mainPinCenterY,
       };
+    },
+
+    resetMainPin() {
+      mapPinMain.style.left = MAIN_PIN_INITIAL_COORDINATES.X + `px`;
+      mapPinMain.style.top = MAIN_PIN_INITIAL_COORDINATES.Y + `px`;
     },
 
     initPinDragAndDrop(onPinMove, onPinMouseDown, onEnter) {

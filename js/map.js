@@ -83,7 +83,9 @@
   };
 
   let removeAd = function () {
-    adCard.remove();
+    if (adCard !== null) {
+      adCard.remove();
+    }
   };
 
   let removePins = function () {

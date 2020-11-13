@@ -2,6 +2,7 @@
 (function () {
   let disablePage = function () {
     window.form.disablePage();
+    window.pin.resetMainPin();
     let startMainPinCoordinates = window.pin.getStartMainPinCoordinates();
     window.form.setAddressInputValue(
         startMainPinCoordinates.x,
