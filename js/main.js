@@ -1,14 +1,18 @@
 "use strict";
 (function () {
-  window.form.disablePage();
+  let disablePage = function () {
+    window.form.disablePage();
+    let startMainPinCoordinates = window.pin.getStartMainPinCoordinates();
+    window.form.setAddressInputValue(
+        startMainPinCoordinates.x,
+        startMainPinCoordinates.y
+    );
+    window.map.removePins();
+    window.map.removeAd();
+  };
 
   window.form.initFormValidation();
 
-  let startMainPinCoordinates = window.pin.getStartMainPinCoordinates();
-  window.form.setAddressInputValue(
-      startMainPinCoordinates.x,
-      startMainPinCoordinates.y
-  );
   let fetchedPins = [];
   let onPinsFetchSuccess = function (pins) {
     window.map.addPinsToMap(pins);
@@ -54,6 +58,7 @@
   });
 
   let onFormSubmitSuccess = function () {
+    disablePage();
   };
 
   let onFormSubmitError = function () {

@@ -16,6 +16,7 @@
   let mapPins = document.querySelector(`.map__pins`);
   let template = document.querySelector(`template`);
   let adTemplate = template.content.querySelector(`.map__card`);
+  let adCard = document.querySelector(`.map__card`);
   let popupPhoto = template.content.querySelector(`.popup__photo`);
   let mapFiltersContainer = document.querySelector(`.map__filters-container`);
 
@@ -81,7 +82,20 @@
     return ad;
   };
 
+  let removeAd = function () {
+    adCard.remove();
+  };
+
+  let removePins = function () {
+    let pinsToRemove = mapPins.querySelectorAll(`.map__pin:not(.map__pin--main)`);
+    pinsToRemove.forEach((pinToRemove) => {
+      mapPins.removeChild(pinToRemove);
+    });
+  };
+
   window.map = {
+    removePins,
+    removeAd,
     createNewPin(ad) {
       let pinElement = pinTemplate
       .cloneNode(true)
@@ -91,7 +105,7 @@
       pinElement.querySelector(`img`).src = ad.author.avatar;
       pinElement.querySelector(`img`).alt = ad.offer.title;
 
-      let onPinItemClick = function () {
+      let openCard = function () {
         let mapCardRemovable = map.querySelector(`.map__card`);
         if (mapCardRemovable) {
           mapCardRemovable.remove();
@@ -99,15 +113,17 @@
         createAd(ad);
         pinElement.classList.add(`.map__pin--active`);
       };
-      pinElement.addEventListener(`click`, onPinItemClick);
-
+      pinElement.addEventListener(`click`, openCard);
+      pinElement.addEventListener(`keydown`, function (evt) {
+        if (evt.key === `Enter`) {
+          openCard();
+        }
+      });
       return pinElement;
     },
+
     addPinsToMap(pins) {
-      let pinsToRemove = mapPins.querySelectorAll(`.map__pin:not(.map__pin--main)`);
-      pinsToRemove.forEach((pinToRemove) => {
-        mapPins.removeChild(pinToRemove);
-      });
+      removePins();
       let pinsFragment = document.createDocumentFragment();
       pins.slice(0, 5).forEach((ad) => {
         pinsFragment.appendChild(window.map.createNewPin(ad));
@@ -122,7 +138,6 @@
         if (pin.offer.type === houseType || houseType === `any`) {
           filteredPins.push(pin);
         }
-        pin.classList.remove(`.map__pin--active`);
       });
       window.map.addPinsToMap(filteredPins);
     },

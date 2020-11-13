@@ -1,9 +1,11 @@
 "use strict";
 
 (function () {
+  const INVALID_ELEMENT_CLASS_NAME = `invalid-element`;
   let adForm = document.querySelector(`.ad-form`);
   let adFormFieldsets = adForm.querySelectorAll(`fieldset`);
   let mapFiltersForm = document.querySelector(`.map__filters`);
+  let submitButton = document.querySelector(`.ad-form__submit`);
   let mapFiltersFieldsetsAndSelects = mapFiltersForm.querySelectorAll(
       `:scope > select, :scope > fieldset`
   );
@@ -44,9 +46,9 @@
   function validateHeadInput(input) {
     input.addEventListener(`change`, function () {
       if (input.validity.tooShort) {
-        input.setCustomValidity(`Заголовок должен состоять из 30-ти символов минимум`);
+        input.setCustomValidity(`Заголовок слишком короткий`);
       } else if (input.validity.tooLong) {
-        input.setCustomValidity(`Заголовок не должен состоять из 100 символов максимум`);
+        input.setCustomValidity(`Заголовок слишком длинный`);
       } else if (input.validity.valueMissing) {
         input.setCustomValidity(`Обязательное поле`);
       } else {
@@ -96,14 +98,25 @@
     onCheckInChangeEvent(checkOutSelect.value);
   }
 
+  let highlightInvalidElement = function (item) {
+    item.classList.add(INVALID_ELEMENT_CLASS_NAME);
+  };
+
+  let unhighlightInvalidElement = function (item) {
+    item.classList.remove(INVALID_ELEMENT_CLASS_NAME);
+  };
+
   window.form = {
     disablePage() {
+      mainMap.classList.add(`map--faded`);
+      adForm.reset();
+      adForm.classList.add(`ad-form--disabled`);
       adFormFieldsets.forEach((element) => {
-        element.setAttribute(`disabled`, `disabled`);
+        element.disabled = true;
       });
 
       mapFiltersFieldsetsAndSelects.forEach((element) => {
-        element.setAttribute(`disabled`, `disabled`);
+        element.disabled = true;
       });
     },
     enablePage(addressX, addressY) {
@@ -112,11 +125,11 @@
       adForm.classList.remove(`ad-form--disabled`);
 
       adFormFieldsets.forEach((element) => {
-        element.removeAttribute(`disabled`);
+        element.disabled = false;
       });
 
       mapFiltersFieldsetsAndSelects.forEach((element) => {
-        element.removeAttribute(`disabled`);
+        element.disabled = false;
       });
 
       setAddressInputValue(addressX, addressY);
@@ -127,10 +140,21 @@
       roomsNumberSelect.addEventListener(`change`, validateRoomsAndGuests);
       guestsNumberSelect.addEventListener(`change`, validateRoomsAndGuests);
       validateRoomsAndGuests();
-
       validateHeadInput(headInput);
       validateTypeAndPrice(typeOfHouse, priceInput);
       validateTime(checkInTime, checkOutTime);
+      Array.from(adForm.elements).forEach((element) => {
+        element.addEventListener(`change`, function () {
+          unhighlightInvalidElement(element);
+        });
+      });
+      submitButton.addEventListener(`click`, function () {
+        Array.from(adForm.elements).forEach((element) => {
+          if (!element.checkValidity()) {
+            highlightInvalidElement(element);
+          }
+        });
+      });
     },
 
     onFormSubmit(callback) {
@@ -139,8 +163,6 @@
         let formData = new FormData(adForm);
         callback(formData);
       });
-
     }
-
   };
 })();

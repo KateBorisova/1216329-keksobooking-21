@@ -1220,6 +1220,11 @@ fieldset {
   outline: none;
 }
 
+.ad-form__element input.invalid-element,
+.ad-form__element select.invalid-element {
+  border: 1px solid red;
+}
+
 .error__button:active {
   outline: none;
   opacity: 0.6;
