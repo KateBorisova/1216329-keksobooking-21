@@ -60,9 +60,33 @@
 
   let onFormSubmitSuccess = function () {
     disablePage();
+    window.form.addSuccessMessage();
+    let onSuccessMessageClick = function () {
+      window.form.removeSuccessMessage();
+      document.removeEventListener(`click`, onSuccessMessageClick);
+    };
+    document.addEventListener(`click`, onSuccessMessageClick);
+
+    let onSuccessMessageEsc = function () {
+      window.form.removeSuccessMessage();
+      document.removeEventListener(`keydown`, onSuccessMessageEsc);
+    };
+    document.addEventListener(`keydown`, onSuccessMessageEsc);
   };
 
   let onFormSubmitError = function () {
+    window.form.addErrorMessage();
+    let onErrorMessageClick = function () {
+      window.form.removeErrorMessage();
+      document.removeEventListener(`click`, onErrorMessageClick);
+    };
+    document.addEventListener(`click`, onErrorMessageClick);
+
+    let onErrorMessageEsc = function () {
+      window.form.removeErrorMessage();
+      document.removeEventListener(`keydown`, onErrorMessageEsc);
+    };
+    document.addEventListener(`keydown`, onErrorMessageEsc);
   };
 
   window.form.onFormSubmit(function (formData) {

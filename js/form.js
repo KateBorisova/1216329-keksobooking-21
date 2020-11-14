@@ -18,6 +18,9 @@
   let typeOfHouse = document.getElementById(`type`);
   let checkInTime = document.getElementById(`timein`);
   let checkOutTime = document.getElementById(`timeout`);
+  let main = document.querySelector(`main`);
+  let successMessageTemplate = document.querySelector(`#success`).content.querySelector(`.success`);
+  let errorMessageTemplate = document.querySelector(`#error`).content.querySelector(`.error`);
 
   function validateRoomsAndGuests() {
     let roomsNumberValue = roomsNumberSelect.value;
@@ -106,6 +109,30 @@
     item.classList.remove(INVALID_ELEMENT_CLASS_NAME);
   };
 
+  let addSuccessMessage = function () {
+    let successMessage = successMessageTemplate.cloneNode(true);
+    main.appendChild(successMessage);
+  };
+
+  let removeSuccessMessage = function () {
+    let successMessageToRemove = document.querySelector(`.success`);
+    if (successMessageToRemove !== null) {
+      successMessageToRemove.remove();
+    }
+  };
+
+  let addErrorMessage = function () {
+    let errorMessage = errorMessageTemplate.cloneNode(true);
+    main.appendChild(errorMessage);
+  };
+
+  let removeErrorMessage = function () {
+    let errorMessageToRemove = document.querySelector(`.error`);
+    if (errorMessageToRemove !== null) {
+      errorMessageToRemove.remove();
+    }
+  };
+
   window.form = {
     disablePage() {
       mainMap.classList.add(`map--faded`);
@@ -163,6 +190,10 @@
         let formData = new FormData(adForm);
         callback(formData);
       });
-    }
+    },
+    addSuccessMessage,
+    removeSuccessMessage,
+    addErrorMessage,
+    removeErrorMessage,
   };
 })();
