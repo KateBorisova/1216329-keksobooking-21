@@ -12,6 +12,16 @@
     window.map.removeAd();
   };
 
+  let adFormReset = document.querySelector(`.ad-form__reset`);
+  adFormReset.addEventListener(`click`, function () {
+    disablePage();
+  });
+  adFormReset.addEventListener(`keydown`, function (evt) {
+    if (evt.key === `Enter`) {
+      disablePage();
+    }
+  });
+
   window.form.initFormValidation();
 
   let fetchedPins = [];
@@ -64,12 +74,16 @@
     let onSuccessMessageClick = function () {
       window.form.removeSuccessMessage();
       document.removeEventListener(`click`, onSuccessMessageClick);
+      document.removeEventListener(`keydown`, onSuccessMessageEsc);
     };
     document.addEventListener(`click`, onSuccessMessageClick);
 
-    let onSuccessMessageEsc = function () {
-      window.form.removeSuccessMessage();
-      document.removeEventListener(`keydown`, onSuccessMessageEsc);
+    let onSuccessMessageEsc = function (evt) {
+      if (evt.key === `Escape`) {
+        window.form.removeSuccessMessage();
+        document.removeEventListener(`keydown`, onSuccessMessageEsc);
+        document.removeEventListener(`click`, onSuccessMessageClick);
+      }
     };
     document.addEventListener(`keydown`, onSuccessMessageEsc);
   };
@@ -79,12 +93,16 @@
     let onErrorMessageClick = function () {
       window.form.removeErrorMessage();
       document.removeEventListener(`click`, onErrorMessageClick);
+      document.removeEventListener(`keydown`, onErrorMessageEsc);
     };
     document.addEventListener(`click`, onErrorMessageClick);
 
-    let onErrorMessageEsc = function () {
-      window.form.removeErrorMessage();
-      document.removeEventListener(`keydown`, onErrorMessageEsc);
+    let onErrorMessageEsc = function (evt) {
+      if (evt.key === `Esc`) {
+        window.form.removeErrorMessage();
+        document.removeEventListener(`keydown`, onErrorMessageEsc);
+        document.removeEventListener(`click`, onErrorMessageClick);
+      }
     };
     document.addEventListener(`keydown`, onErrorMessageEsc);
   };
