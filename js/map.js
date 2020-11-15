@@ -15,7 +15,6 @@
   let mapPins = document.querySelector(`.map__pins`);
   let template = document.querySelector(`template`);
   let adTemplate = template.content.querySelector(`.map__card`);
-  let adCard = document.querySelector(`.map__card`);
   let popupPhoto = template.content.querySelector(`.popup__photo`);
   let mapFiltersContainer = document.querySelector(`.map__filters-container`);
   let mapFilers = document.querySelector(`.map__filters`);
@@ -83,6 +82,7 @@
   };
 
   let removeAd = function () {
+    let adCard = document.querySelector(`.map__card`);
     if (adCard !== null) {
       adCard.remove();
     }
@@ -151,10 +151,7 @@
       mapPins.appendChild(pinsFragment);
     },
 
-    // A || (!A && B)
-    // A || B
-
-    addPinsToMapByType(pins) {
+    addPinsToMapByFilters(pins) {
       let filteredPins = [];
       let selectedFilters = getSelectedFilters();
       pins.forEach((pin) => {

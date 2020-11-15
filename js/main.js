@@ -1,5 +1,21 @@
 "use strict";
 (function () {
+
+  let DEBOUNCE_INTERVAL = 500;
+
+  let debounce = function (callback) {
+    let lastTimeout = null;
+
+    return function (param) {
+      if (lastTimeout) {
+        window.clearTimeout(lastTimeout);
+      }
+      lastTimeout = window.setTimeout(function () {
+        callback(param);
+      }, DEBOUNCE_INTERVAL);
+    };
+  };
+
   let disablePage = function () {
     window.form.disablePage();
     window.pin.resetMainPin();
@@ -28,7 +44,9 @@
   let addEventListersOnFilters = function (pins) {
     Array.from(mapFilers.elements).forEach((element) => {
       element.addEventListener(`change`, function () {
-        window.map.addPinsToMapByType(pins);
+        window.map.removeAd();
+        let onFilterClick = debounce(window.map.addPinsToMapByFilters);
+        onFilterClick(pins);
       });
     });
   };
