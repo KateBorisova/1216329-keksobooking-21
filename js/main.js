@@ -24,10 +24,20 @@
 
   window.form.initFormValidation();
 
+  let mapFilers = document.querySelector(`.map__filters`);
+  let addEventListersOnFilters = function (pins) {
+    Array.from(mapFilers.elements).forEach((element) => {
+      element.addEventListener(`change`, function () {
+        window.map.addPinsToMapByType(pins);
+      });
+    });
+  };
+
   let fetchedPins = [];
   let onPinsFetchSuccess = function (pins) {
     window.map.addPinsToMap(pins);
     fetchedPins = pins;
+    addEventListersOnFilters(fetchedPins);
   };
 
   let onPinsFetchError = function () {
@@ -62,11 +72,6 @@
       }
   );
 
-  let houseTypeSelect = document.querySelector(`#housing-type`);
-  houseTypeSelect.addEventListener(`change`, function (evt) {
-    let houseType = evt.currentTarget.value;
-    window.map.addPinsToMapByType(fetchedPins, houseType);
-  });
 
   let onFormSubmitSuccess = function () {
     disablePage();

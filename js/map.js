@@ -3,7 +3,6 @@
 (function () {
   const PIN_HEIGHT = 70;
   const PIN_WIDTH = 50;
-  const ESC_KEYCODE = 27;
   const TYPES_MAP = {
     PALACE: `Дворец`,
     FLAT: `Квартира`,
@@ -19,13 +18,14 @@
   let adCard = document.querySelector(`.map__card`);
   let popupPhoto = template.content.querySelector(`.popup__photo`);
   let mapFiltersContainer = document.querySelector(`.map__filters-container`);
+  let mapFilers = document.querySelector(`.map__filters`);
 
-  let onEscDown = function (evt, func) {
-    if (evt.keyCode === ESC_KEYCODE) {
-      func();
+
+  let onEscDown = function (evt, callback) {
+    if (evt.key === `Escape`) {
+      callback();
     }
   };
-
 
   let createFeatureFragment = function (adData) {
     let featureFragment = document.createDocumentFragment();
@@ -95,6 +95,23 @@
     });
   };
 
+  let getSelectedFilters = function () {
+    return {
+      houseType: mapFilers.elements[`housing-type`].value,
+      price: mapFilers.elements[`housing-price`].value,
+      roomsNumber: mapFilers.elements[`housing-rooms`].value,
+      guestsNumber: mapFilers.elements[`housing-guests`].value,
+      withWiFi: mapFilers.elements[`filter-wifi`].checked,
+      withDishwasher: mapFilers.elements[`filter-dishwasher`].checked,
+      withParking: mapFilers.elements[`filter-parking`].checked,
+      withWasher: mapFilers.elements[`filter-washer`].checked,
+      withElevator: mapFilers.elements[`filter-elevator`].checked,
+      withConditioner: mapFilers.elements[`filter-conditioner`].checked,
+    };
+  };
+  getSelectedFilters();
+
+
   window.map = {
     removePins,
     removeAd,
@@ -134,10 +151,28 @@
       mapPins.appendChild(pinsFragment);
     },
 
-    addPinsToMapByType(pins, houseType) {
+    // A || (!A && B)
+    // A || B
+
+    addPinsToMapByType(pins) {
       let filteredPins = [];
+      let selectedFilters = getSelectedFilters();
       pins.forEach((pin) => {
-        if (pin.offer.type === houseType || houseType === `any`) {
+        if (
+          (pin.offer.type === selectedFilters.houseType || selectedFilters.houseType === `any`) &&
+          (pin.offer.price < 10000 && selectedFilters.price === `low` ||
+          pin.offer.price >= 10000 && pin.offer.price < 50000 && selectedFilters.price === `middle` ||
+          pin.offer.price >= 50000 && selectedFilters.price === `high` ||
+          selectedFilters.price === `any`) &&
+          (pin.offer.rooms === Number(selectedFilters.roomsNumber) || selectedFilters.roomsNumber === `any`) &&
+          (pin.offer.guests === Number(selectedFilters.guestsNumber) || selectedFilters.guestsNumber === `any`) &&
+          (pin.offer.features.includes(`wifi`) || !selectedFilters.withWiFi) &&
+          (pin.offer.features.includes(`dishwasher`) || !selectedFilters.withDishwasher) &&
+          (pin.offer.features.includes(`parking`) || !selectedFilters.withParking) &&
+          (pin.offer.features.includes(`washer`) || !selectedFilters.withWasher) &&
+          (pin.offer.features.includes(`elevator`) || !selectedFilters.withElevator) &&
+          (pin.offer.features.includes(`conditioner`) || !selectedFilters.withConditioner)
+        ) {
           filteredPins.push(pin);
         }
       });
