@@ -7,7 +7,7 @@
     PALACE: `Дворец`,
     FLAT: `Квартира`,
     HOUSE: `Дом`,
-    BUNGALO: `Бунгало`
+    BUNGALO: `Бунгало`,
   };
 
   let map = document.querySelector(`.map`);
@@ -18,7 +18,6 @@
   let popupPhoto = template.content.querySelector(`.popup__photo`);
   let mapFiltersContainer = document.querySelector(`.map__filters-container`);
   let mapFilers = document.querySelector(`.map__filters`);
-
 
   let onEscDown = function (evt, callback) {
     if (evt.key === `Escape`) {
@@ -51,22 +50,36 @@
 
     ad.querySelector(`.map__card img`).src = adData.author.avatar;
     ad.querySelector(`.popup__title`).textContent = adData.offer.title;
-    ad.querySelector(`.popup__text--price`).textContent = adData.offer.price + ` ₽/ночь`;
-    ad.querySelector(`.popup__type`).textContent = TYPES_MAP[adData.offer.type.toUpperCase()];
-    ad.querySelector(`.popup__text--capacity`).textContent = adData.offer.rooms + ` комнаты для ` + adData.offer.guests + ` гостей`;
-    ad.querySelector(`.popup__text--time`).textContent = `Заезд после ` + adData.offer.checkin + `, выезд до ` + adData.offer.checkout;
+    ad.querySelector(`.popup__text--price`).textContent =
+      adData.offer.price + ` ₽/ночь`;
+    ad.querySelector(`.popup__type`).textContent =
+      TYPES_MAP[adData.offer.type.toUpperCase()];
+    ad.querySelector(`.popup__text--capacity`).textContent =
+      adData.offer.rooms + ` комнаты для ` + adData.offer.guests + ` гостей`;
+    ad.querySelector(`.popup__text--time`).textContent =
+      `Заезд после ` +
+      adData.offer.checkin +
+      `, выезд до ` +
+      adData.offer.checkout;
     ad.querySelector(`.popup__features`).innerHTML = ``;
-    ad.querySelector(`.popup__features`).appendChild(createFeatureFragment(adData));
-    ad.querySelector(`.popup__description`).textContent = adData.offer.description;
-    ad.querySelector(`.popup__photos`).removeChild(ad.querySelector(`.popup__photo`));
-    ad.querySelector(`.popup__photos`).appendChild(createPhotosFragment(adData));
+    ad.querySelector(`.popup__features`).appendChild(
+        createFeatureFragment(adData)
+    );
+    ad.querySelector(`.popup__description`).textContent =
+      adData.offer.description;
+    ad.querySelector(`.popup__photos`).removeChild(
+        ad.querySelector(`.popup__photo`)
+    );
+    ad.querySelector(`.popup__photos`).appendChild(
+        createPhotosFragment(adData)
+    );
     mapFiltersContainer.insertAdjacentElement(`beforebegin`, ad);
 
     let closeAdBtn = ad.querySelector(`.popup__close`);
     let closeAd = function () {
       ad.remove();
       closeAdBtn.removeEventListener(`click`, onCloseAdBtnClick);
-      document.removeEventListener(`keydown`, onAdEscDown);
+      document.removeEventListener(`keydown`, onDocumentKeydown);
     };
 
     let onCloseAdBtnClick = function () {
@@ -74,10 +87,10 @@
     };
     closeAdBtn.addEventListener(`click`, onCloseAdBtnClick);
 
-    let onAdEscDown = function (evt) {
+    let onDocumentKeydown = function (evt) {
       onEscDown(evt, closeAd);
     };
-    document.addEventListener(`keydown`, onAdEscDown);
+    document.addEventListener(`keydown`, onDocumentKeydown);
     return ad;
   };
 
@@ -89,7 +102,9 @@
   };
 
   let removePins = function () {
-    let pinsToRemove = mapPins.querySelectorAll(`.map__pin:not(.map__pin--main)`);
+    let pinsToRemove = mapPins.querySelectorAll(
+        `.map__pin:not(.map__pin--main)`
+    );
     pinsToRemove.forEach((pinToRemove) => {
       mapPins.removeChild(pinToRemove);
     });
@@ -111,14 +126,13 @@
   };
   getSelectedFilters();
 
-
   window.map = {
     removePins,
     removeAd,
     createNewPin(ad) {
       let pinElement = pinTemplate
-      .cloneNode(true)
-      .content.querySelector(`.map__pin`);
+        .cloneNode(true)
+        .content.querySelector(`.map__pin`);
       pinElement.style.left = ad.location.x - PIN_WIDTH / 2 + `px`;
       pinElement.style.top = ad.location.y - PIN_HEIGHT + `px`;
       pinElement.querySelector(`img`).src = ad.author.avatar;
@@ -152,26 +166,41 @@
     },
 
     addPinsToMapByFilters(pins) {
-      let filteredPins = [];
       let selectedFilters = getSelectedFilters();
-      pins.forEach((pin) => {
-        if (
-          (pin.offer.type === selectedFilters.houseType || selectedFilters.houseType === `any`) &&
-          (pin.offer.price < 10000 && selectedFilters.price === `low` ||
-          pin.offer.price >= 10000 && pin.offer.price < 50000 && selectedFilters.price === `middle` ||
-          pin.offer.price >= 50000 && selectedFilters.price === `high` ||
-          selectedFilters.price === `any`) &&
-          (pin.offer.rooms === Number(selectedFilters.roomsNumber) || selectedFilters.roomsNumber === `any`) &&
-          (pin.offer.guests === Number(selectedFilters.guestsNumber) || selectedFilters.guestsNumber === `any`) &&
+      let filteredPins = pins.filter((pin) => {
+        let houseTypeMatched =
+          pin.offer.type === selectedFilters.houseType ||
+          selectedFilters.houseType === `any`;
+
+        let priceMatched =
+          (pin.offer.price < 10000 && selectedFilters.price === `low`) ||
+          (pin.offer.price >= 10000 && pin.offer.price < 50000 && selectedFilters.price === `middle`) ||
+          (pin.offer.price >= 50000 && selectedFilters.price === `high`) ||
+          selectedFilters.price === `any`;
+
+        let roomsMatched =
+          pin.offer.rooms === Number(selectedFilters.roomsNumber) ||
+          selectedFilters.roomsNumber === `any`;
+
+        let guestsNumberMatched =
+          pin.offer.guests === Number(selectedFilters.guestsNumber) ||
+          selectedFilters.guestsNumber === `any`;
+
+        let featuresMatched =
           (pin.offer.features.includes(`wifi`) || !selectedFilters.withWiFi) &&
           (pin.offer.features.includes(`dishwasher`) || !selectedFilters.withDishwasher) &&
           (pin.offer.features.includes(`parking`) || !selectedFilters.withParking) &&
           (pin.offer.features.includes(`washer`) || !selectedFilters.withWasher) &&
           (pin.offer.features.includes(`elevator`) || !selectedFilters.withElevator) &&
-          (pin.offer.features.includes(`conditioner`) || !selectedFilters.withConditioner)
-        ) {
-          filteredPins.push(pin);
-        }
+          (pin.offer.features.includes(`conditioner`) || !selectedFilters.withConditioner);
+
+        return (
+          houseTypeMatched &&
+          priceMatched &&
+          roomsMatched &&
+          guestsNumberMatched &&
+          featuresMatched
+        );
       });
       window.map.addPinsToMap(filteredPins);
     },

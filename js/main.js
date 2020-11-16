@@ -1,9 +1,7 @@
 "use strict";
 (function () {
 
-  let DEBOUNCE_INTERVAL = 500;
-
-  let debounce = function (callback) {
+  let debounce = function (callback, timeoutMs) {
     let lastTimeout = null;
 
     return function (param) {
@@ -12,7 +10,7 @@
       }
       lastTimeout = window.setTimeout(function () {
         callback(param);
-      }, DEBOUNCE_INTERVAL);
+      }, timeoutMs);
     };
   };
 
@@ -42,10 +40,10 @@
 
   let mapFilers = document.querySelector(`.map__filters`);
   let addEventListersOnFilters = function (pins) {
+    let onFilterClick = debounce(window.map.addPinsToMapByFilters, 500);
     Array.from(mapFilers.elements).forEach((element) => {
       element.addEventListener(`change`, function () {
         window.map.removeAd();
-        let onFilterClick = debounce(window.map.addPinsToMapByFilters);
         onFilterClick(pins);
       });
     });
@@ -97,18 +95,18 @@
     let onSuccessMessageClick = function () {
       window.form.removeSuccessMessage();
       document.removeEventListener(`click`, onSuccessMessageClick);
-      document.removeEventListener(`keydown`, onSuccessMessageEsc);
+      document.removeEventListener(`keydown`, onSuccessMessageKeydown);
     };
     document.addEventListener(`click`, onSuccessMessageClick);
 
-    let onSuccessMessageEsc = function (evt) {
+    let onSuccessMessageKeydown = function (evt) {
       if (evt.key === `Escape`) {
         window.form.removeSuccessMessage();
-        document.removeEventListener(`keydown`, onSuccessMessageEsc);
+        document.removeEventListener(`keydown`, onSuccessMessageKeydown);
         document.removeEventListener(`click`, onSuccessMessageClick);
       }
     };
-    document.addEventListener(`keydown`, onSuccessMessageEsc);
+    document.addEventListener(`keydown`, onSuccessMessageKeydown);
   };
 
   let onFormSubmitError = function () {
@@ -116,23 +114,21 @@
     let onErrorMessageClick = function () {
       window.form.removeErrorMessage();
       document.removeEventListener(`click`, onErrorMessageClick);
-      document.removeEventListener(`keydown`, onErrorMessageEsc);
+      document.removeEventListener(`keydown`, onErrorMessageKeydown);
     };
     document.addEventListener(`click`, onErrorMessageClick);
 
-    let onErrorMessageEsc = function (evt) {
+    let onErrorMessageKeydown = function (evt) {
       if (evt.key === `Esc`) {
         window.form.removeErrorMessage();
-        document.removeEventListener(`keydown`, onErrorMessageEsc);
+        document.removeEventListener(`keydown`, onErrorMessageKeydown);
         document.removeEventListener(`click`, onErrorMessageClick);
       }
     };
-    document.addEventListener(`keydown`, onErrorMessageEsc);
+    document.addEventListener(`keydown`, onErrorMessageKeydown);
   };
 
-  window.form.onFormSubmit(function (formData) {
+  window.form.subscribeOnSubmit(function (formData) {
     window.ajax.submitForm(formData, onFormSubmitSuccess, onFormSubmitError);
   });
-
-
 })();

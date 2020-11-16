@@ -46,21 +46,20 @@
     addressInput.value = addressX + `, ` + addressY;
   }
 
-  function validateHeadInput(input) {
-    input.addEventListener(`change`, function () {
-      if (input.validity.tooShort) {
-        input.setCustomValidity(`Заголовок слишком короткий`);
-      } else if (input.validity.tooLong) {
-        input.setCustomValidity(`Заголовок слишком длинный`);
-      } else if (input.validity.valueMissing) {
-        input.setCustomValidity(`Обязательное поле`);
-      } else {
-        input.setCustomValidity(``);
-      }
-    });
+  function validateHeadInput() {
+    if (headInput.validity.tooShort) {
+      headInput.setCustomValidity(`Заголовок слишком короткий`);
+    } else if (headInput.validity.tooLong) {
+      headInput.setCustomValidity(`Заголовок слишком длинный`);
+    } else if (headInput.validity.valueMissing) {
+      headInput.setCustomValidity(`Обязательное поле`);
+    } else {
+      headInput.setCustomValidity(``);
+    }
   }
 
-  function priceInputValidation(newPriceInput, maxValue, minValue) {
+
+  function validatePrice(newPriceInput, maxValue, minValue) {
     newPriceInput.max = maxValue;
     newPriceInput.min = minValue;
     newPriceInput.placeholder = minValue;
@@ -74,7 +73,7 @@
       checkTypeMap.set(`house`, 5000);
       checkTypeMap.set(`palace`, 10000);
       let minValue = checkTypeMap.get(newTypeValue);
-      priceInputValidation(newPriceInput, 1000000, minValue);
+      validatePrice(newPriceInput, 1000000, minValue);
     };
     typeOfHousing.addEventListener(`change`, (event) => {
       let type = event.target.value;
@@ -84,21 +83,13 @@
   }
 
   function validateTime(checkInSelect, checkOutSelect) {
-    let onCheckInChangeEvent = function (newTimesValue) {
-      checkOutSelect.value = newTimesValue;
-    };
-    checkInSelect.addEventListener(`change`, (event) => {
-      onCheckInChangeEvent(event.target.value);
+    checkInSelect.addEventListener(`change`, (evt) => {
+      checkOutSelect.value = evt.target.value;
     });
-
-    let onCheckOutChangeEvent = function (newTimesValue) {
-      checkInSelect.value = newTimesValue;
-    };
-    checkOutSelect.addEventListener(`change`, (event) => {
-      onCheckOutChangeEvent(event.target.value);
+    checkOutSelect.addEventListener(`change`, (evt) => {
+      checkInSelect.value = evt.target.value;
     });
-
-    onCheckInChangeEvent(checkOutSelect.value);
+    checkOutSelect.value = checkInSelect.value;
   }
 
   let highlightInvalidElement = function (item) {
@@ -166,8 +157,8 @@
     initFormValidation() {
       roomsNumberSelect.addEventListener(`change`, validateRoomsAndGuests);
       guestsNumberSelect.addEventListener(`change`, validateRoomsAndGuests);
+      headInput.addEventListener(`change`, validateHeadInput);
       validateRoomsAndGuests();
-      validateHeadInput(headInput);
       validateTypeAndPrice(typeOfHouse, priceInput);
       validateTime(checkInTime, checkOutTime);
       Array.from(adForm.elements).forEach((element) => {
@@ -184,7 +175,7 @@
       });
     },
 
-    onFormSubmit(callback) {
+    subscribeOnSubmit(callback) {
       adForm.addEventListener(`submit`, function (evt) {
         evt.preventDefault();
         let formData = new FormData(adForm);

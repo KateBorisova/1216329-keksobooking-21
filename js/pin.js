@@ -97,14 +97,12 @@
         }
       };
 
-      let onKeyDown = function (evt) {
+      mapPinMain.addEventListener(`mousedown`, onMouseDown);
+      mapPinMain.addEventListener(`keydown`, function (evt) {
         if (evt.key === `Enter`) {
           onEnter();
         }
-      };
-      mapPinMain.addEventListener(`mousedown`, onMouseDown);
-      mapPinMain.addEventListener(`keydown`, onKeyDown);
-
+      });
     },
 
   };
