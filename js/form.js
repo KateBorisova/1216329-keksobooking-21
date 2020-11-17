@@ -22,7 +22,7 @@
   let successMessageTemplate = document.querySelector(`#success`).content.querySelector(`.success`);
   let errorMessageTemplate = document.querySelector(`#error`).content.querySelector(`.error`);
 
-  function validateRoomsAndGuests() {
+  let validateRoomsAndGuests = function () {
     let roomsNumberValue = roomsNumberSelect.value;
     let guestsNumberValue = guestsNumberSelect.value;
     let roomsMatchGuests =
@@ -40,13 +40,13 @@
           ? ``
           : `Количество гостей не соответствует количеству комнат`
     );
-  }
+  };
 
-  function setAddressInputValue(addressX, addressY) {
+  let setAddressInputValue = function (addressX, addressY) {
     addressInput.value = addressX + `, ` + addressY;
-  }
+  };
 
-  function validateHeadInput() {
+  let validateHeadInput = function () {
     if (headInput.validity.tooShort) {
       headInput.setCustomValidity(`Заголовок слишком короткий`);
     } else if (headInput.validity.tooLong) {
@@ -56,16 +56,16 @@
     } else {
       headInput.setCustomValidity(``);
     }
-  }
+  };
 
 
-  function validatePrice(newPriceInput, maxValue, minValue) {
+  let validatePrice = function (newPriceInput, maxValue, minValue) {
     newPriceInput.max = maxValue;
     newPriceInput.min = minValue;
     newPriceInput.placeholder = minValue;
-  }
+  };
 
-  function validateTypeAndPrice(typeOfHousing, newPriceInput) {
+  let validateTypeAndPrice = function (typeOfHousing, newPriceInput) {
     let putCurrentPrice = function (newTypeValue) {
       let checkTypeMap = new Map();
       checkTypeMap.set(`bungalow`, 0);
@@ -80,9 +80,9 @@
       putCurrentPrice(type);
     });
     putCurrentPrice(typeOfHousing.value);
-  }
+  };
 
-  function validateTime(checkInSelect, checkOutSelect) {
+  let validateTime = function (checkInSelect, checkOutSelect) {
     checkInSelect.addEventListener(`change`, (evt) => {
       checkOutSelect.value = evt.target.value;
     });
@@ -90,7 +90,7 @@
       checkInSelect.value = evt.target.value;
     });
     checkOutSelect.value = checkInSelect.value;
-  }
+  };
 
   let highlightInvalidElement = function (item) {
     item.classList.add(INVALID_ELEMENT_CLASS_NAME);

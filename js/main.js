@@ -1,28 +1,22 @@
 "use strict";
 (function () {
 
-  let debounce = function (callback, timeoutMs) {
-    let lastTimeout = null;
 
-    return function (param) {
-      if (lastTimeout) {
-        window.clearTimeout(lastTimeout);
-      }
-      lastTimeout = window.setTimeout(function () {
-        callback(param);
-      }, timeoutMs);
-    };
-  };
+  let startMainPinCoordinates = window.pin.getStartMainPinCoordinates();
+  window.form.setAddressInputValue(
+      startMainPinCoordinates.x,
+      startMainPinCoordinates.y
+  );
+
   let disablePage = function () {
     window.form.disablePage();
     window.pin.resetMainPin();
-    let startMainPinCoordinates = window.pin.getStartMainPinCoordinates();
+    window.map.removePins();
+    window.card.removeAd();
     window.form.setAddressInputValue(
         startMainPinCoordinates.x,
         startMainPinCoordinates.y
     );
-    window.map.removePins();
-    window.map.removeAd();
   };
 
   let adFormReset = document.querySelector(`.ad-form__reset`);
@@ -39,10 +33,10 @@
 
   let mapFilers = document.querySelector(`.map__filters`);
   let addEventListersOnFilters = function (pins) {
-    let debounceAddPinsToMapByFilters = debounce(window.map.addPinsToMapByFilters, 500);
+    let debounceAddPinsToMapByFilters = window.utils.debounce(window.map.addPinsToMapByFilters, 500);
     Array.from(mapFilers.elements).forEach((element) => {
       element.addEventListener(`change`, function () {
-        window.map.removeAd();
+        window.card.removeAd();
         debounceAddPinsToMapByFilters(pins);
       });
     });
