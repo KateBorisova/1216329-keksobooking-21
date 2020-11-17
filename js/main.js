@@ -13,7 +13,6 @@
       }, timeoutMs);
     };
   };
-
   let disablePage = function () {
     window.form.disablePage();
     window.pin.resetMainPin();
