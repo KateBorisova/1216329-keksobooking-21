@@ -66,7 +66,7 @@
   }
 
   function validateTypeAndPrice(typeOfHousing, newPriceInput) {
-    let onChangeEvent = function (newTypeValue) {
+    let putCurrentPrice = function (newTypeValue) {
       let checkTypeMap = new Map();
       checkTypeMap.set(`bungalow`, 0);
       checkTypeMap.set(`flat`, 1000);
@@ -77,9 +77,9 @@
     };
     typeOfHousing.addEventListener(`change`, (event) => {
       let type = event.target.value;
-      onChangeEvent(type);
+      putCurrentPrice(type);
     });
-    onChangeEvent(typeOfHousing.value);
+    putCurrentPrice(typeOfHousing.value);
   }
 
   function validateTime(checkInSelect, checkOutSelect) {

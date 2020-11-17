@@ -40,11 +40,11 @@
 
   let mapFilers = document.querySelector(`.map__filters`);
   let addEventListersOnFilters = function (pins) {
-    let onFilterClick = debounce(window.map.addPinsToMapByFilters, 500);
+    let debounceAddPinsToMapByFilters = debounce(window.map.addPinsToMapByFilters, 500);
     Array.from(mapFilers.elements).forEach((element) => {
       element.addEventListener(`change`, function () {
         window.map.removeAd();
-        onFilterClick(pins);
+        debounceAddPinsToMapByFilters(pins);
       });
     });
   };
